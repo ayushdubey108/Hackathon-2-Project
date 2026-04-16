@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student LeetCode – Gamified Learning Platform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Student
+        LeetCode – Gamified Learning Platform with Dashboard, Tasks, Leaderboard, and Profile</h2>
+
+    <!-- NAV -->
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">SF</div>
+            StuFlow
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showPage('dashboard',this)">Dashboard</button>
+            <button class="nav-tab" onclick="showPage('tasks',this)">Tasks</button>
+            <button class="nav-tab" onclick="showPage('leaderboard',this)">Leaderboard</button>
+            <button class="nav-tab" onclick="showPage('profile',this)">Profile</button>
+        </div>
+        <div class="xp-pill">
+            <div class="xp-dot"></div>
+            <span id="nav-xp" style="font-family:var(--mono)">2,840 XP</span>
+        </div>
+    </nav>
+
+    <!-- DASHBOARD PAGE -->
+    <div class="page active" id="page-dashboard">
+        <div class="dash-header">
+            <h1>Good morning, Ayush 👋</h1>
+            <p>You're on the path to acheive success! 3 tasks completed today. Keep it going.</p>
+        </div>
+
+        <!-- Streak -->
+        <div class="streak-banner">
+            <div class="streak-left">
+                <div class="streak-flame">🔥</div>
+                <div class="streak-info">
+                    <strong id="streak-count">12-Day Streak</strong>
+                    <span>Complete today's tasks to keep it alive!</span>
+                </div>
+            </div>
+            <div class="streak-days" id="streak-days"></div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total XP</div>
+                <div class="stat-value gold" id="total-xp">2,840</div>
+                <div class="stat-sub">+120 today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Tasks Done</div>
+                <div class="stat-value green" id="tasks-done-count">47</div>
+                <div class="stat-sub">this month</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Rank</div>
+                <div class="stat-value blue">#4</div>
+                <div class="stat-sub">in your class</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Badges</div>
+                <div class="stat-value red" id="badges-count">6</div>
+                <div class="stat-sub">earned</div>
+            </div>
+        </div>
+
+        <div class="dash-grid">
+            <div>
+                <!-- Level Progress -->
+                <div class="card" style="margin-bottom:12px">
+                    <div class="card-title">Level Progress</div>
+                    <div class="level-bar-wrap">
+                        <div class="level-header">
+                            <span style="font-size:14px;font-weight:700">Level 8 — Challenger</span>
+                            <div class="level-badge">2,840 / 3,200 XP</div>
+                        </div>
+                        <div class="bar-bg">
+                            <div class="bar-fill" id="xp-bar" style="width:0%"></div>
+                        </div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:1rem">
+                        <div style="text-align:center">
+                            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Beginner</div>
+                            <div style="height:4px;background:var(--accent);border-radius:2px"></div>
+                        </div>
+                        <div style="text-align:center">
+                            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Learner</div>
+                            <div style="height:4px;background:var(--accent);border-radius:2px"></div>
+                        </div>
+                        <div style="text-align:center">
+                            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Explorer</div>
+                            <div style="height:4px;background:var(--accent);border-radius:2px"></div>
+                        </div>
+                        <div style="text-align:center">
+                            <div style="font-size:11px;color:var(--accent);margin-bottom:4px;font-weight:700">Challenger
+                            </div>
+                            <div
+                                style="height:4px;background:var(--accent);border-radius:2px;box-shadow:0 0 6px var(--accent)">
+                            </div>
+                        </div>
+                        <div style="text-align:center">
+                            <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Advanced</div>
+                            <div style="height:4px;background:var(--surface3);border-radius:2px"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Tasks -->
+                <div class="card">
+                    <div class="card-title">Today's Tasks</div>
+                    <div class="tasks-list" id="today-tasks"></div>
+                </div>
+            </div>
+
+            <div>
+                <!-- Badges -->
+                <div class="card" style="margin-bottom:12px">
+                    <div class="card-title">Badges</div>
+                    <div class="badges-grid" id="badges-grid"></div>
+                </div>
+
+                <!-- Mini Leaderboard -->
+                <div class="card">
+                    <div class="card-title">Class Ranking</div>
+                    <div id="mini-lb"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TASKS PAGE -->
+    <div class="page" id="page-tasks">
+        <div class="dash-header">
+            <h1>All Tasks</h1>
+            <p>Complete tasks to earn XP and climb the leaderboard.</p>
+        </div>
+        <div class="filter-row" id="task-filters"></div>
+        <div class="tasks-grid" id="all-tasks-grid"></div>
+    </div>
+
+    <!-- LEADERBOARD PAGE -->
+    <div class="page" id="page-leaderboard">
+        <div class="dash-header">
+            <h1>Leaderboard</h1>
+            <p>Compete with your peers. Earn more XP to climb higher.</p>
+        </div>
+        <div class="lb-tabs">
+            <button class="lb-tab active" onclick="showLB('class',this)">Class</button>
+            <button class="lb-tab" onclick="showLB('school',this)">School</button>
+            <button class="lb-tab" onclick="showLB('state',this)">State</button>
+        </div>
+        <div class="card">
+            <table class="lb-table" id="lb-table"></table>
+        </div>
+    </div>
+
+    <!-- PROFILE PAGE -->
+    <div class="page" id="page-profile">
+        <div class="profile-top">
+            <div class="profile-avatar">A</div>
+            <div class="profile-info">
+                <h2>Ayush Kumar Dubey</h2>
+                <p>Class 12-A : Sunbeam School, Jaunpur</p>
+                <div class="profile-tags">
+                    <span class="profile-tag">🔥 12-day streak</span>
+                    <span class="profile-tag">⚡ Level 8</span>
+                    <span class="profile-tag">🏆 Rank #4</span>
+                    <span class="profile-tag">📚 Academic Focus</span>
+                </div>
+            </div>
+        </div>
+        <div class="profile-grid">
+            <div class="card">
+                <div class="card-title">Stats Overview</div>
+                <div class="activity-row"><span>Total XP Earned</span><span
+                        style="font-family:var(--mono);color:var(--accent)" id="p-xp">2,840</span></div>
+                <div class="activity-row"><span>Tasks Completed</span><span
+                        style="font-family:var(--mono);color:var(--accent2)" id="p-tasks">47</span></div>
+                <div class="activity-row"><span> Main focus</span><span
+                        style="font-family:var(--mono);color:var(--accent2)" id="p-tasks">Fittness</span></div>
+                <div class="activity-row"><span>Current Streak</span><span
+                        style="font-family:var(--mono);color:#f97316">12 days</span></div>
+                <div class="activity-row"><span>Best Streak</span><span
+                        style="font-family:var(--mono);color:var(--muted)">21 days</span></div>
+                <div class="activity-row"><span>Level</span><span style="font-family:var(--mono);color:var(--accent3)">8
+                        — Challenger</span></div>
+                <div class="activity-row"><span>Badges Earned</span><span style="font-family:var(--mono)"
+                        id="p-badges">6</span></div>
+            </div>
+            <div class="card">
+                <div class="card-title">Recent Activity</div>
+                <div id="recent-activity"></div>
+            </div>
+            <div class="card">
+                <div class="card-title">Category Breakdown</div>
+                <div id="category-breakdown"></div>
+            </div>
+            <div class="card">
+                <div class="card-title">All Badges</div>
+                <div class="badges-grid" id="profile-badges-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="task-modal">
+        <div class="modal">
+            <h3 id="modal-title">Task Title</h3>
+            <p id="modal-desc">Task description goes here.</p>
+            <div class="modal-xp" id="modal-xp">+50 XP</div>
+            <div class="modal-btns">
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary" onclick="completeTask()">Mark Complete ✓</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
